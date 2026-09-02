@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RangamWorks - Create Ticket</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app create-ticket-app">
+<aside class="sidebar">
+  <div class="brand">Rangam<b>Works</b></div>
+  <nav class="nav">
+    <h4>Jobs</h4><a href="#">Search Jobs</a>
+    <h4>Candidates</h4><a href="#">Create Candidate</a><a href="candidate-details.html">Candidates List</a><a href="#">Candidates Status</a><a href="#">Refer Candidate</a>
+    <a href="#">Candidate Connect</a><a href="#">Contact us</a>
+    <h4>Ticketing System</h4><a href="index.html">Ticket List</a><a class="active" href="create-ticket.html">Create Ticket</a>
+    <h4>Reports &amp; Analytics</h4><a href="#">Member Activity Dashboard</a><a href="#">Member Activity Reports</a>
+  </nav>
+</aside>
+<main class="content create-ticket-content">
+  <div class="environment-banner">⚠ You are in the staging environment</div>
+  <div class="utility-bar"><button class="utility-menu" type="button" aria-label="Collapse menu">☰</button><div class="utility-icons">A− &nbsp; A &nbsp; A+ &nbsp; ◐ &nbsp; 🔔 &nbsp; ◯</div></div>
+
+  <section class="contact-form-shell" aria-labelledby="createTicketHeading">
+    <h1 id="createTicketHeading">Contact Us</h1>
+    <p class="contact-intro">If you need our team's support or have any questions, please fill out the form below.</p>
+    <p class="required-note"><span>*</span> Indicates a required field</p>
+
+    <form id="createTicketForm">
+      <div class="contact-grid">
+        <div class="contact-field">
+          <label for="ticketFor">Request For <span>*</span></label>
+          <select id="ticketFor" required><option selected>Member</option><option>Health Plan</option><option>Program Team</option></select>
+        </div>
+        <div class="contact-field">
+          <label for="ticketType">Type of Request <span>*</span></label>
+          <select id="ticketType" required>
+            <option selected>Looking for Jobs</option>
+            <option>Resume Assistance</option>
+            <option>Career Coaching/Program Support</option>
+            <option>Registration Assistance</option>
+            <option>Password/Login Support</option>
+            <option>Account/Profile Updates</option>
+            <option>Technical Issues</option>
+            <option>General Questions</option>
+          </select>
+        </div>
+
+        <div class="contact-field"><label for="firstName">First Name <span>*</span></label><input id="firstName" value="Pradeep" required></div>
+        <div class="contact-field"><label for="lastName">Last Name <span>*</span></label><input id="lastName" value="Mohanta" required></div>
+        <div class="contact-field"><label for="ticketEmail">Email <span>*</span></label><input id="ticketEmail" type="email" value="admin@datacure.com" required></div>
+        <div class="contact-field"><label for="ticketPhone">Phone</label><input id="ticketPhone" value="(455) 657-7777"></div>
+
+        <fieldset class="preferred-communication">
+          <legend>Preferred Communication <span>*</span></legend>
+          <label><input type="radio" name="preferredCommunication" value="Email" checked> Email</label>
+          <label><input type="radio" name="preferredCommunication" value="Phone"> Phone</label>
+          <label><input type="radio" name="preferredCommunication" value="Text Message (SMS)"> Text Message (SMS)</label>
+        </fieldset>
+
+        <div class="contact-field full-width"><label for="ticketState">State <span>*</span></label>
+          <select id="ticketState" required>
+            <option value="" selected>-- Select --</option>
+            <option>Virginia</option><option>Florida</option><option>Texas</option><option>Kansas</option><option>California</option>
+          </select>
+        </div>
+
+        <div class="contact-field full-width"><label for="ticketMessage">Message <span>*</span></label><textarea id="ticketMessage" required></textarea></div>
+      </div>
+      <button class="btn primary submit-ticket-btn" type="submit">Submit</button>
+    </form>
+  </section>
+</main>
+</div>
+
+<div class="modal-backdrop" id="ticketCreatedModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ticketCreatedTitle">
+    <div class="modal-h"><strong id="ticketCreatedTitle">Ticket Submitted</strong><button class="modal-x" type="button" data-close="ticketCreatedModal">×</button></div>
+    <div class="modal-b"><p>The new ticket has been submitted successfully.</p><p class="muted">A Ticket ID will be generated for the new ticket.</p></div>
+    <div class="modal-f"><a class="btn primary" href="index.html">Go to Ticket List</a></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

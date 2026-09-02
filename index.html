@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<html><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>RangamWorks Wireframe - Ticket List</title><link href="styles.css" rel="stylesheet"/></head><body data-access-role="program-team"><div class="app">
+<aside class="sidebar"><div class="brand">Rangam<b>Works</b></div><nav class="nav"><h4>Jobs</h4><a href="#">Search Jobs</a><h4>Candidates</h4><a href="#">Create Candidate</a><a href="candidate-details.html">Candidates List</a><a href="#">Candidates Status</a><a href="#">Refer Candidate</a><a href="#">Candidate Connect</a><a href="#">Contact us</a><h4>Ticket System</h4><a class="active" href="index.html">Ticket List</a><a href="create-ticket.html">Create Ticket</a><h4>Reports &amp; Analytics</h4><a href="#">Member Activity Dashboard</a><a href="#">Member Activity Reports</a></nav></aside>
+<main class="content"><div class="topbar"><div><h1>All Tickets</h1><div class="muted">View, filter and manage all member and health plan tickets.</div></div><div class="actions"><button class="btn">Export</button><a class="btn primary" href="create-ticket.html">Create Ticket</a></div></div>
+<section class="kpis"><div class="kpi"><strong>428</strong>Total Tickets</div><div class="kpi"><strong>112</strong>New</div><div class="kpi"><strong>186</strong>In Progress</div><div class="kpi"><strong>24</strong>On Hold</div><div class="kpi"><strong>78</strong>Closed</div></section>
+<section class="card"><div class="card-h">Filter Tickets</div><div class="card-b"><div class="filters request-filter-layout">
+<div class="field candidate-search-field"><label for="candidateSearch">Candidate Name, Email or Phone Number</label><input autocomplete="off" id="candidateSearch" placeholder="Search candidate by name, email or phone" type="search"/></div>
+<div class="field"><label>State</label><select id="state"><option>All</option><option>Virginia</option><option>Florida</option><option>Texas</option></select></div>
+<div class="field"><label>Ticket Type</label><select id="requestType"><option>All</option><option>Member Ticket</option><option>Health Plan</option><option>Program Team</option></select></div>
+<div class="field"><label>Category</label><select id="category"><option>All</option></select></div>
+<div class="field"><label>Status</label><select><option>All Statuses</option><option>New</option><option>In Progress</option><option>Closed</option></select></div>
+<div class="field"><label>Assigned Owner</label><select id="owner"><option>All</option></select></div>
+<div class="field"><label>Referred to IT</label><select><option>All</option><option>Yes</option><option>No</option></select></div>
+<div class="field date-row-start"><label>Date Range</label><select id="dateRange"><option>Today</option><option>Yesterday</option><option>This Week</option><option>Last Week</option><option selected="">This Month</option><option>Last Month</option><option>This Quarter</option><option>Last Quarter</option><option>This Year</option><option>Last Year</option><option>Custom</option></select></div>
+<div class="field"><label>From</label><input id="dateFrom" type="date" value="2026-08-01"/></div>
+<div class="field"><label>To</label><input id="dateTo" type="date" value="2026-08-31"/></div>
+</div>
+<div class="filters-actions"><button class="btn">Clear Filters</button><button class="btn primary">Apply Filters</button></div></div></section>
+<div class="table-wrap"><table id="requestListTable"><thead><tr>
+<th><button class="sort-head" data-sort-col="0" type="button">Ticket ID <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="1" type="button">Ticket Type <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="2" type="button">Ticket Category <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="3" type="button">Member Name <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="4" type="button">Current Status <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="5" type="button">Current Owner <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="6" data-sort-type="date" type="button">Last Updated <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="7" data-sort-type="date" type="button">Created Date <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="8" data-sort-type="date" type="button">Closed Date <span aria-hidden="true">↕</span></button></th>
+<th><button class="sort-head" data-sort-col="9" type="button">Referred to IT <span aria-hidden="true">↕</span></button></th>
+<th>History</th>
+</tr></thead><tbody>
+<tr data-candidate-search="David Garcia davidad@email.com (725) 246-4081">
+<td><a href="manage-request.html">6492</a></td>
+<td>Member</td>
+<td>Technical Issues</td>
+<td><a href="candidate-details.html">David Garcia</a></td>
+<td><span class="badge orange">In-Progress</span></td>
+<td>Sarah Patel</td>
+<td data-sort-value="2026-07-21T09:30:00">Jul 21, 2026 9:30 AM</td>
+<td data-sort-value="2026-07-20T15:39:05">Jul 20, 2026</td>
+<td data-sort-value=""></td>
+<td><span class="badge green">Yes</span></td>
+<td><button aria-label="View status updates for ticket 6492" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Sarah Patel" data-current-status="In-Progress" data-member-name="David Garcia" data-ticket-id="6492" type="button">👁</button></td>
+</tr>
+<tr data-candidate-search="David Garcia davidad@email.com (725) 246-4081">
+<td><a href="manage-request.html">6299</a></td>
+<td>Member</td>
+<td>Career Coaching/Program Support</td>
+<td><a href="candidate-details.html">David Garcia</a></td>
+<td><span class="badge green">Closed</span></td>
+<td>Sarah Patel</td>
+<td data-sort-value="2026-06-17T14:20:00">Jun 17, 2026 2:20 PM</td>
+<td data-sort-value="2026-06-12T10:05:00">Jun 12, 2026</td>
+<td data-sort-value="2026-06-17T14:20:00">Jun 17, 2026</td>
+<td><span class="badge blue">No</span></td>
+<td><button aria-label="View status updates for ticket 6299" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Sarah Patel" data-current-status="Closed" data-member-name="David Garcia" data-ticket-id="6299" type="button">👁</button></td>
+</tr>
+<tr data-candidate-search="David Garcia davidad@email.com (725) 246-4081">
+<td><a href="manage-request.html">6128</a></td>
+<td>Member</td>
+<td>Password/Login Support</td>
+<td><a href="candidate-details.html">David Garcia</a></td>
+<td><span class="badge green">Closed</span></td>
+<td>Bhavi Thaker</td>
+<td data-sort-value="2026-05-08T11:45:00">May 8, 2026 11:45 AM</td>
+<td data-sort-value="2026-05-06T09:15:00">May 6, 2026</td>
+<td data-sort-value="2026-05-08T11:45:00">May 8, 2026</td>
+<td><span class="badge green">Yes</span></td>
+<td><button aria-label="View status updates for ticket 6128" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Bhavi Thaker" data-current-status="Closed" data-member-name="David Garcia" data-ticket-id="6128" type="button">👁</button></td>
+</tr>
+<tr data-candidate-search="David Garcia davidad@email.com (725) 246-4081">
+<td><a href="manage-request.html">6032</a></td>
+<td>Member</td>
+<td>Resume Assistance</td>
+<td><a href="candidate-details.html">David Garcia</a></td>
+<td><span class="badge green">Closed</span></td>
+<td>Jessica Davis</td>
+<td data-sort-value="2026-04-24T16:10:00">Apr 24, 2026 4:10 PM</td>
+<td data-sort-value="2026-04-21T13:00:00">Apr 21, 2026</td>
+<td data-sort-value="2026-04-24T16:10:00">Apr 24, 2026</td>
+<td><span class="badge blue">No</span></td>
+<td><button aria-label="View status updates for ticket 6032" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Jessica Davis" data-current-status="Closed" data-member-name="David Garcia" data-ticket-id="6032" type="button">👁</button></td>
+</tr>
+<tr data-candidate-search="Emily Martin emily.martin@email.com (555) 444-0198">
+<td><a href="manage-request.html">6491</a></td>
+<td>Health Plan</td>
+<td>General Questions</td>
+<td><a href="candidate-details.html">Emily Martin</a></td>
+<td><span class="badge green">Closed</span></td>
+<td>Bhavi Thaker</td>
+<td data-sort-value="2026-07-21T08:10:00">Jul 21, 2026 8:10 AM</td>
+<td data-sort-value="2026-07-18T10:22:00">Jul 18, 2026</td>
+<td data-sort-value="2026-07-21T08:10:00">Jul 21, 2026</td>
+<td><span class="badge blue">No</span></td>
+<td><button aria-label="View status updates for ticket 6491" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Bhavi Thaker" data-current-status="Closed" data-member-name="Emily Martin" data-ticket-id="6491" type="button">👁</button></td>
+</tr>
+</tbody></table><div class="footer-row"><span>Showing 1 to 5 of 428 tickets</span><span>1 2 3 4 5 … 17</span></div></div>
+</main></div>
+
+
+
+<div class="modal-backdrop" id="ticketHistoryModal">
+<div aria-labelledby="dynamicHistoryTitle" aria-modal="true" class="modal status-modal" role="dialog">
+<div class="modal-h">
+<div><div class="status-title" id="dynamicHistoryTitle">Ticket Status Updates</div><div class="muted status-subtitle" id="dynamicHistorySubtitle"></div></div>
+<button aria-label="Close" class="modal-x" data-close="ticketHistoryModal" type="button">×</button>
+</div>
+<div class="modal-b">
+<div class="status-steps" id="dynamicStatusSteps"></div>
+<div class="status-timeline" id="dynamicStatusTimeline"></div>
+</div>
+<div class="modal-f"><button class="btn primary" data-close="ticketHistoryModal" type="button">Done</button></div>
+</div>
+</div><script src="app.js"></script></body></html>
