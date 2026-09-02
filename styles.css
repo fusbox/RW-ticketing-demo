@@ -192,3 +192,10 @@ body.view-history-page .ticket-head{grid-template-columns:2fr repeat(3,minmax(0,
   font-weight:600;
   line-height:1;
 }
+
+/* Candidate Details - compact, aligned Program Status controls */
+.candidate-program-status{margin:14px 0 16px;}
+.candidate-program-status>.muted{display:block;margin-bottom:7px;}
+.candidate-program-status-options{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.candidate-program-status-options label{display:inline-flex;align-items:center;gap:5px;line-height:1.2;cursor:pointer;white-space:nowrap;}
+.candidate-program-status-options input[type="radio"]{width:14px;height:14px;margin:0;vertical-align:middle;accent-color:#0b61e8;flex:0 0 14px;}
