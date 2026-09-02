@@ -26,3 +26,7 @@ Current Ticket List behavior:
 
 Important:
 Do not open index.html directly from inside the ZIP preview. Extract the ZIP first.
+Update 2026-09-02: Ticket List sample statuses now include New and On-Hold. History eye opens Status Updates and provides View Full History navigation.
+- Ticket List examples now include Ticket #6492 = New and Ticket #6491 = On-Hold. History flow: eye icon -> Status Updates popup -> View Full History.
+
+Update 2026-09-02: Ticket List visible sample status mix revised to show New, On-Hold, In-Progress, and Closed across ticket rows.
