@@ -154,3 +154,41 @@ body.view-history-page .ticket-head{grid-template-columns:2fr repeat(3,minmax(0,
 .communication-message-box{background:#f7f9fc;border:1px solid var(--line);border-radius:6px;padding:14px;min-height:120px}
 .communication-message-box p{white-space:pre-wrap;line-height:1.55;margin:8px 0 0}
 @media(max-width:700px){.communication-detail-grid{grid-template-columns:1fr}}
+
+
+.app-toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  transform:translate(-50%,18px);
+  z-index:5000;
+  max-width:min(620px,calc(100vw - 32px));
+  padding:12px 18px;
+  border-radius:8px;
+  color:#fff;
+  font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.app-toast.success{background:#177245;}
+.app-toast.error{background:#b42318;}
+.app-toast.show{opacity:1;transform:translate(-50%,0);}
+.delete-attachment-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  font-size:18px;
+  line-height:1;
+}
+
+
+/* Ticketing flow: improve visibility of all eye/view icons. */
+.history-eye,
+.communication-view-btn{
+  font-size:20px;
+  font-weight:600;
+  line-height:1;
+}
