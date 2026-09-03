@@ -16,7 +16,7 @@ const rt=document.getElementById('requestType'), cat=document.getElementById('ca
 const cats={"All":["All"],"Member Ticket":["All","Job Search Assistance","Resume Assistance","Career Coaching/Program Support","Registration Assistance","Password/Login Support","Account/Profile Updates","Technical Issues","General Questions"],"Health Plan":["All","General Questions","Technical Issues","Other"],"Program Team":["All","Registration/Account Help","Technical Issues","General questions","Other"]};
 function fillCategory(){if(!rt||!cat)return;cat.innerHTML='';(cats[rt.value]||['All']).forEach(v=>{const o=document.createElement('option');o.textContent=v;cat.appendChild(o);});}
 if(rt){rt.addEventListener('change',fillCategory);fillCategory();}
-const state=document.getElementById('state'), owner=document.getElementById('owner');const owners={All:['All'],Virginia:['All','Sarah Patel','Bhavi Thaker','Jessica Davis'],Florida:['All','Mike Kumar','Alicia Johnson'],Texas:['All','Laura Bennett','Amit Shah']};
+const state=document.getElementById('state'), owner=document.getElementById('owner');const owners={All:['All'],Virginia:['All','Sarah Patel','Rangam Team','Jessica Davis'],Florida:['All','Mike Kumar','Alicia Johnson'],Texas:['All','Laura Bennett','Amit Shah']};
 function fillOwners(){if(!state||!owner)return;owner.innerHTML='';(owners[state.value]||['All']).forEach(v=>{const o=document.createElement('option');o.textContent=v;owner.appendChild(o);});}
 if(state){state.addEventListener('change',fillOwners);fillOwners();}
 
@@ -27,14 +27,14 @@ const ce=document.getElementById('commEmailTab'),cs=document.getElementById('com
 if(ce&&cs&&ep&&sp){const set=t=>{const email=t==='e';ce.classList.toggle('active',email);cs.classList.toggle('active',!email);ep.classList.toggle('hidden',!email);sp.classList.toggle('hidden',email);};ce.addEventListener('click',()=>set('e'));cs.addEventListener('click',()=>set('s'));}
 
 const dz=document.getElementById('dropzone'),fi=document.getElementById('fileInput'),ab=document.getElementById('attachBody');
-function addFiles(files){if(!ab)return;Array.from(files).forEach(f=>{const tr=document.createElement('tr');tr.innerHTML=`<td><a href="#">${f.name}</a></td><td>Anne Fahey</td><td>Just now</td><td>${Math.max(1,Math.round(f.size/1024))} KB</td><td><a href="#" class="delete-attachment-link" aria-label="Delete ${f.name}" title="Delete attachment">🗑</a></td>`;ab.prepend(tr);});}
+function addFiles(files){if(!ab)return;Array.from(files).forEach(f=>{const tr=document.createElement('tr');tr.innerHTML=`<td><a href="#">${f.name}</a></td><td>Anne Fahey</td><td>Just now</td><td>${Math.max(1,Math.round(f.size/1024))} KB</td><td><a href="#" class="delete-attachment-link" aria-label="Delete ${f.name}" title="Delete attachment">🗑</a></td>`;ab.prepend(tr);if(window.addTicketAudit)window.addTicketAudit('Attachment Added',null,null,'Anne Fahey',`Attachment "${f.name}" uploaded (${Math.max(1,Math.round(f.size/1024))} KB).`);});}
 if(dz&&fi){dz.addEventListener('click',()=>fi.click());fi.addEventListener('change',()=>addFiles(fi.files));['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.style.background='#eef5ff';}));['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.style.background='';}));dz.addEventListener('drop',e=>addFiles(e.dataTransfer.files));}
 
 let editRow=null,deleteRow=null;const nt=document.getElementById('notesTable');
 function updateNotesCount(){if(!nt)return;const n=nt.tBodies[0].rows.length;const c=document.getElementById('notesCount'),s=document.getElementById('notesShowing');if(c)c.textContent=n;if(s)s.textContent=`Showing 1 to ${n} of ${n} entries`;}
 if(nt){nt.addEventListener('click',e=>{const edit=e.target.closest('[data-edit-note]'),del=e.target.closest('[data-delete-note]');if(edit){editRow=edit.closest('tr');document.getElementById('editNoteText').value=editRow.dataset.note;document.getElementById('editNoteCreator').value=editRow.dataset.creator;document.getElementById('editNoteTime').value=editRow.dataset.time;openModal('editNoteModal');}if(del){deleteRow=del.closest('tr');openModal('deleteNoteModal');}});}
-const se=document.getElementById('saveEditNote');if(se)se.addEventListener('click',()=>{if(editRow){const v=document.getElementById('editNoteText').value.trim();if(v){editRow.dataset.note=v;editRow.querySelector('.note-cell').textContent=v;closeModal('editNoteModal');}}});
-const cd=document.getElementById('confirmDeleteNote');if(cd)cd.addEventListener('click',()=>{if(deleteRow){deleteRow.remove();deleteRow=null;updateNotesCount();closeModal('deleteNoteModal');}});
+const se=document.getElementById('saveEditNote');if(se)se.addEventListener('click',()=>{if(editRow){const oldValue=editRow.dataset.note||'';const v=document.getElementById('editNoteText').value.trim();if(v){editRow.dataset.note=v;editRow.querySelector('.note-cell').textContent=v;if(window.addTicketAudit)window.addTicketAudit('Ticketing Note Edited',null,null,'Anne Fahey',`Note updated from "${oldValue}" to "${v}".`);closeModal('editNoteModal');}}});
+const cd=document.getElementById('confirmDeleteNote');if(cd)cd.addEventListener('click',()=>{if(deleteRow){const deletedNote=deleteRow.dataset.note||'';deleteRow.remove();deleteRow=null;updateNotesCount();if(window.addTicketAudit)window.addTicketAudit('Ticketing Note Deleted',null,null,'Anne Fahey',`Deleted note: ${deletedNote}`);closeModal('deleteNoteModal');}});
 
 ['createRequestTop','createRequestBottom'].forEach(id=>{const b=document.getElementById(id);if(b)b.addEventListener('click',()=>openModal('createSuccessModal'));});
 const submitted=document.getElementById('createSubmittedOn');if(submitted&&!submitted.value)submitted.value='2026-08-26T20:30';
@@ -219,14 +219,16 @@ document.querySelectorAll('.dynamic-history-eye').forEach(btn=>{
     if(btn) btn.addEventListener('click',()=>openDrawer(drawerId,btn));
   });
 
-  // Working Details: guide Technical Issues into the existing Refer to IT flow.
+  // Working Details: show the Refer to IT guidance for reasons that may require IT support.
   const reasonSelect=document.getElementById('manageCategory');
   const referralPrompt=document.getElementById('technicalReferralPrompt');
   const referToItCheck=document.getElementById('referToItCheck');
   const syncTechnicalReferralPrompt=()=>{
-    const isTechnical=reasonSelect && reasonSelect.value.trim().toLowerCase()==='technical issues';
-    if(referralPrompt) referralPrompt.style.display=isTechnical?'block':'none';
-    if(!isTechnical && referToItCheck) referToItCheck.checked=false;
+    const referralReasons=['technical issues','password/login support','other'];
+    const selectedReason=reasonSelect?reasonSelect.value.trim().toLowerCase():'';
+    const showReferral=referralReasons.includes(selectedReason);
+    if(referralPrompt) referralPrompt.style.display=showReferral?'block':'none';
+    if(!showReferral && referToItCheck) referToItCheck.checked=false;
   };
   if(reasonSelect){
     reasonSelect.addEventListener('change',syncTechnicalReferralPrompt);
@@ -450,6 +452,12 @@ document.querySelectorAll('.dynamic-history-eye').forEach(btn=>{
           window.showTicketToast('Notes added successfully!','success');
         }
       }
+      if(window.addTicketAudit){
+        window.addTicketAudit('Ticketing Note Added',null,null,'Anne Fahey',`Ticketing note saved: ${text}`);
+        if(shouldNotify&&selectedUser){
+          window.addTicketAudit('User Notified from Ticketing Note',null,null,'Anne Fahey',`Notification sent to ${selectedUser} for the saved Ticketing Note.`);
+        }
+      }
       setTimeout(()=>{addNoteBtn.textContent='Save Note';},900);
     });
   }
@@ -624,25 +632,55 @@ RangamWorks Program Team`
 
 // Ticket audit trail support for demo interactions.
 (function(){
-  const AUDIT_KEY='rangamworks_ticket_6492_audit';
-  window.addTicketAudit=function(activity,stage,status,user,reason){
+  function currentTicketId(){
+    const params=new URLSearchParams(window.location.search);
+    const fromQuery=params.get('ticket');
+    if(fromQuery)return fromQuery;
+    const h1=document.querySelector('.ticket-head h1');
+    const match=h1&&h1.textContent.match(/#(\d+)/);
+    if(match)return match[1];
+    return '6492';
+  }
+  const ticketId=currentTicketId();
+  const AUDIT_KEY=`rangamworks_ticket_${ticketId}_audit`;
+
+  function stageNow(){
+    const el=document.getElementById('manageStage');
+    return el?el.value:'Accepted';
+  }
+  function statusNow(){
+    const el=document.getElementById('manageStatus');
+    return el?el.value:'In-Progress';
+  }
+  function auditTime(item){
+    if(item.iso)return new Date(item.iso).getTime();
+    const parsed=Date.parse(item.time||'');
+    return Number.isNaN(parsed)?0:parsed;
+  }
+
+  window.addTicketAudit=function(activity,stage,status,user,reason,meta){
     try{
       const items=JSON.parse(localStorage.getItem(AUDIT_KEY)||'[]');
+      const now=new Date();
       items.unshift({
-        time:new Date().toLocaleString('en-US'),
-        activity:activity||'Updated',
-        stage:stage||'Accepted',
-        status:status||'In-Progress',
+        iso:now.toISOString(),
+        time:now.toLocaleString('en-US'),
+        activity:activity||'Ticket Updated',
+        stage:stage||stageNow(),
+        status:status||statusNow(),
         user:user||'Anne Fahey',
-        reason:reason||''
+        reason:reason||'',
+        meta:meta||''
       });
-      localStorage.setItem(AUDIT_KEY,JSON.stringify(items.slice(0,50)));
+      localStorage.setItem(AUDIT_KEY,JSON.stringify(items.slice(0,200)));
     }catch(e){}
   };
 
   const acceptBtn=document.getElementById('acceptTicketBtn');
   if(acceptBtn){
-    acceptBtn.addEventListener('click',()=>window.addTicketAudit('Ticket Accepted','Accepted','In-Progress','Anne Fahey','Current Owner updated to Anne Fahey.'));
+    acceptBtn.addEventListener('click',()=>{
+      window.addTicketAudit('Ticket Accepted','Accepted','In-Progress','Anne Fahey','Ticket accepted; Current Owner updated to Anne Fahey.');
+    });
   }
 
   const reassignSave=document.querySelector('[data-save-drawer="reassignDrawer"]');
@@ -651,8 +689,8 @@ RangamWorks Program Team`
   if(reassignSave){
     reassignSave.addEventListener('click',()=>{
       const owner=reassignOwner&&reassignOwner.value?reassignOwner.value:'Selected owner';
-      const reason=reassignReason&&reassignReason.value?reassignReason.value:'';
-      window.addTicketAudit('Reassigned','Accepted','In-Progress','Anne Fahey',`Reassigned to ${owner}. ${reason}`.trim());
+      const reason=reassignReason&&reassignReason.value?reassignReason.value:'No reassignment reason entered.';
+      window.addTicketAudit('Ticket Reassigned',stageNow(),statusNow(),'Anne Fahey',`Current Owner changed to ${owner}. Reason: ${reason} Notification sent to ${owner}.`);
     });
   }
 
@@ -660,8 +698,8 @@ RangamWorks Program Team`
   const referReason=document.getElementById('escalationReason');
   if(referSave){
     referSave.addEventListener('click',()=>{
-      const reason=referReason&&referReason.value?referReason.value:'';
-      window.addTicketAudit('Referred to IT','Accepted','In-Progress','Anne Fahey',`Referring Reason: ${reason}. Rangam IT Owner: rangamworks@rangam.com. Notification sent.`);
+      const reason=referReason&&referReason.value?referReason.value:'No referral reason entered.';
+      window.addTicketAudit('Referred to IT',stageNow(),statusNow(),'Anne Fahey',`Referring Reason: ${reason} Rangam IT Owner: rangamworks@rangam.com. Notification sent.`);
     });
   }
 
@@ -669,45 +707,176 @@ RangamWorks Program Team`
   const rejectReason=document.getElementById('rejectReason');
   if(rejectSave){
     rejectSave.addEventListener('click',()=>{
-      const reason=rejectReason&&rejectReason.value?rejectReason.value:'';
-      window.addTicketAudit('Ticket Rejected','Rejected','Closed','Anne Fahey',reason);
+      const reason=rejectReason&&rejectReason.value?rejectReason.value:'No rejection reason entered.';
+      window.addTicketAudit('Ticket Rejected','Rejected','Closed','Anne Fahey',`Ticket Stage changed to Rejected; Status changed to Closed. Reason: ${reason}`);
     });
   }
 
-  const addNoteBtn=document.getElementById('addProgramTeamNote');
-  const noteInput=document.getElementById('programTeamNoteText');
-  if(addNoteBtn){
-    addNoteBtn.addEventListener('click',()=>{
-      const reason=noteInput&&noteInput.value?noteInput.value:'Program Team note added.';
-      window.addTicketAudit('Program Team Note Added','Accepted','In-Progress','Anne Fahey',reason);
+  // Capture every editable Working Details field change when the user explicitly saves the ticket.
+  const saveBtn=document.getElementById('manageTicketSaveBtn');
+
+  // Known business fields plus automatic discovery so future editable fields are also audited.
+  const knownTracked=[
+    ['manageRequestType','Ticket Type'],
+    ['manageCategory','Reason'],
+    ['managePriority','Priority'],
+    ['manageStage','Ticket Stage'],
+    ['manageStatus','Ticket Status'],
+    ['currentOwnerSelect','Current Owner']
+  ];
+
+  const trackedMap=new Map(knownTracked);
+  document.querySelectorAll('.manage-main-card.working-row .field').forEach((field,index)=>{
+    const control=field.querySelector('select,input:not([type="checkbox"]):not([type="radio"]),textarea');
+    const label=field.querySelector('label');
+    if(!control||control.disabled||control.readOnly)return;
+    if(!control.id)control.id=`auditedWorkingField${index+1}`;
+    if(!trackedMap.has(control.id)){
+      trackedMap.set(control.id,(label?label.textContent:'Field').replace(/\s*\*\s*$/,'').trim());
+    }
+  });
+
+  const tracked=Array.from(trackedMap.entries());
+  let snapshot={};
+  tracked.forEach(([id])=>{
+    const el=document.getElementById(id);
+    if(el)snapshot[id]=el.value;
+  });
+
+  function displayValue(value){
+    const v=(value===null||value===undefined||String(value).trim()==='')?'Blank':String(value).trim();
+    return `"${v}"`;
+  }
+
+  if(saveBtn){
+    saveBtn.addEventListener('click',()=>{
+      const changedFields=[];
+      tracked.forEach(([id,label])=>{
+        const el=document.getElementById(id);
+        if(!el)return;
+        const before=snapshot[id];
+        const after=el.value;
+        if(before!==undefined && before!==after){
+          changedFields.push({id,label,before,after});
+        }
+      });
+
+      // Add one history row per field so the audit trail clearly identifies what changed.
+      changedFields.forEach(change=>{
+        let activity=`${change.label} Updated`;
+        if(change.id==='manageStage')activity='Ticket Stage Updated';
+        if(change.id==='manageStatus')activity='Ticket Status Updated';
+        window.addTicketAudit(
+          activity,
+          stageNow(),
+          statusNow(),
+          'Anne Fahey',
+          `Field: ${change.label} | Previous Value: ${displayValue(change.before)} | New Value: ${displayValue(change.after)} | Saved successfully.`
+        );
+        snapshot[change.id]=change.after;
+      });
+
+      const summary=changedFields.length
+        ? `Ticket saved successfully. ${changedFields.length} field${changedFields.length===1?' was':'s were'} updated: ${changedFields.map(c=>c.label).join(', ')}.`
+        : 'Ticket saved successfully. No field values were changed.';
+      window.addTicketAudit('Ticket Saved',stageNow(),statusNow(),'Anne Fahey',summary);
     });
   }
 
-  const sendEmailBtn=Array.from(document.querySelectorAll('#emailCompose button')).find(b=>b.textContent.trim()==='Send Email');
-  if(sendEmailBtn){
-    sendEmailBtn.addEventListener('click',()=>{
-      const option=document.getElementById('emailOption');
-      const template=document.getElementById('predefinedEmailTemplate');
-      const detail=option&&option.value==='Use a Standard Template' && template ? template.value : 'Custom Email';
-      window.addTicketAudit('Email Sent','Accepted','In-Progress','Anne Fahey',`Email Outbox updated: ${detail}.`);
-    });
-  }
+  // Seeded history represents prior events for the selected ticket.
+  const histories={
+    '6492':[
+      {time:'09/02/2026 09:18 AM',activity:'Ticket Accepted',stage:'Accepted',status:'In-Progress',user:'Anne Fahey',reason:'Accepted by current user; Current Owner updated to Anne Fahey.'},
+      {time:'09/02/2026 09:12 AM',activity:'Reassigned',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Reassigned to Anne Fahey. Notification sent.'},
+      {time:'09/02/2026 09:05 AM',activity:'Referred to IT',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Referring Reason: Portal access assistance required. Rangam IT Owner: rangamworks@rangam.com. Notification sent.'},
+      {time:'09/02/2026 08:58 AM',activity:'Program Team Note Added',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Follow-up action documented in Notes History.'},
+      {time:'09/02/2026 08:54 AM',activity:'Program Team User Notified',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Action-required note notification sent to selected Program Team user.'},
+      {time:'09/02/2026 08:48 AM',activity:'Email Sent - Update Email',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Email Outbox updated for Ticket #6492.'},
+      {time:'09/02/2026 08:43 AM',activity:'Email Received',stage:'Accepted',status:'In-Progress',user:'Eugene Hubbard',reason:'Email Inbox updated with requester response.'},
+      {time:'09/01/2026 04:20 PM',activity:'Attachment Added',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Supporting document uploaded to Attachments.'},
+      {time:'09/01/2026 03:45 PM',activity:'Working Details Updated',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Field: Reason | Previous Value: "General Questions" | New Value: "Job Search Assistance" | Saved successfully.'},
+      {time:'09/01/2026 03:30 PM',activity:'Ticket Viewed',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Ticket details opened.'},
+      {time:'08/30/2026 11:10 AM',activity:'Status Updated',stage:'Accepted',status:'In-Progress',user:'Program Team',reason:'Field: Current Status | Previous Value: "New" | New Value: "In-Progress" | Saved successfully.'},
+      {time:'08/30/2026 10:55 AM',activity:'Owner Assigned',stage:'Accepted',status:'New',user:'Program Team',reason:'Field: Current Owner | Previous Value: "Unassigned" | New Value: "Program Team" | Saved successfully.'},
+      {time:'08/30/2026 10:40 AM',activity:'Ticket Accepted',stage:'Accepted',status:'New',user:'Program Team',reason:'Ticket accepted for processing.'},
+      {time:'08/30/2026 10:20 AM',activity:'Ticket Created',stage:'New',status:'New',user:'System',reason:'Ticket created and initial status assigned.'},
+      {time:'08/30/2026 10:20 AM',activity:'Auto Generated',stage:'New',status:'New',user:'System',reason:'Ticket ID generated automatically.'},
+      {time:'08/29/2026 04:16 PM',activity:'SMS Sent',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'SMS sent to member and recorded in Communication history.'},
+      {time:'08/29/2026 04:10 PM',activity:'SMS Received',stage:'Accepted',status:'In-Progress',user:'Eugene Hubbard',reason:'SMS received from member and recorded in Communication history.'}
+    ],
+    '6299':[
+      {time:'06/17/2026 02:20 PM',activity:'Ticket Status Updated',stage:'Accepted',status:'In-Progress',user:'Sarah Patel',reason:'Status changed to In-Progress.'},
+      {time:'06/12/2026 10:30 AM',activity:'Ticket Accepted',stage:'Accepted',status:'New',user:'Sarah Patel',reason:'Ticket accepted for processing.'},
+      {time:'06/12/2026 10:05 AM',activity:'Ticket Created',stage:'New',status:'New',user:'System',reason:'Ticket #6299 created.'}
+    ],
+    '6128':[
+      {time:'05/10/2026 11:15 AM',activity:'Ticket Status Updated',stage:'Accepted',status:'On-Hold',user:'Program Team',reason:'Status changed to On-Hold pending member response.'},
+      {time:'05/07/2026 09:45 AM',activity:'Ticket Accepted',stage:'Accepted',status:'In-Progress',user:'Program Team',reason:'Ticket accepted and work started.'},
+      {time:'05/06/2026 09:15 AM',activity:'Ticket Created',stage:'New',status:'New',user:'System',reason:'Ticket #6128 created.'}
+    ],
+    '6032':[
+      {time:'04/22/2026 04:30 PM',activity:'Ticket Closed',stage:'Resolved',status:'Closed',user:'Jessica Davis',reason:'Ticket resolved and closed.'},
+      {time:'04/20/2026 01:10 PM',activity:'Ticket Status Updated',stage:'Accepted',status:'In-Progress',user:'Jessica Davis',reason:'Status changed to In-Progress.'},
+      {time:'04/18/2026 08:50 AM',activity:'Ticket Created',stage:'New',status:'New',user:'System',reason:'Ticket #6032 created.'}
+    ],
+    '6491':[
+      {time:'07/21/2026 08:10 AM',activity:'Ticket Created',stage:'New',status:'New',user:'System',reason:'Ticket #6491 created and initial status assigned.'}
+    ]
+  };
 
-  const auditBody=document.querySelector('#viewHistoryAuditBody');
+  const auditBody=document.getElementById('viewHistoryAuditBody');
   if(auditBody){
-    let items=[];
-    try{items=JSON.parse(localStorage.getItem(AUDIT_KEY)||'[]');}catch(e){}
-    items.slice().reverse().forEach(item=>{
+    const heading=document.getElementById('historyTicketId');
+    if(heading)heading.textContent=ticketId;
+
+    let saved=[];
+    try{saved=JSON.parse(localStorage.getItem(AUDIT_KEY)||'[]');}catch(e){}
+    const base=(histories[ticketId]||[
+      {time:new Date().toLocaleString('en-US'),activity:'Ticket History Opened',stage:'New',status:'New',user:'System',reason:`No seeded history is available for Ticket #${ticketId}. New activity will appear here as it occurs.`}
+    ]).map(item=>Object.assign({iso:null},item));
+
+    const signature=item=>[
+      item.activity||'',
+      item.stage||'',
+      item.status||'',
+      item.user||'',
+      item.reason||''
+    ].join('|').toLowerCase();
+    const seen=new Set();
+    const combined=[...saved,...base]
+      .sort((a,b)=>auditTime(b)-auditTime(a))
+      .filter(item=>{
+        const key=signature(item);
+        if(seen.has(key))return false;
+        seen.add(key);
+        return true;
+      });
+    auditBody.innerHTML='';
+
+    const badgeClass=value=>{
+      const v=(value||'').toLowerCase();
+      if(v==='in-progress'||v==='on-hold')return 'orange';
+      if(v==='closed'||v==='resolved')return 'green';
+      if(v==='rejected')return 'red';
+      return 'blue';
+    };
+
+    combined.forEach(item=>{
       const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${item.time}</td><td>${item.activity}</td><td><span class="badge ${item.stage==='New'?'blue':'green'}">${item.stage}</span></td><td><span class="badge ${item.status==='In-Progress'?'orange':item.status==='Closed'?'green':'blue'}">${item.status}</span></td><td>${item.user}</td><td></td>`;
-      tr.lastElementChild.textContent=item.reason||'—';
-      auditBody.prepend(tr);
+      tr.innerHTML=`<td></td><td></td><td><span class="badge ${badgeClass(item.stage)}"></span></td><td><span class="badge ${badgeClass(item.status)}"></span></td><td></td><td></td>`;
+      tr.cells[0].textContent=item.time||'—';
+      tr.cells[1].textContent=item.activity||'Updated';
+      tr.cells[2].querySelector('span').textContent=item.stage||'—';
+      tr.cells[3].querySelector('span').textContent=item.status||'—';
+      tr.cells[4].textContent=item.user||'—';
+      tr.cells[5].textContent=item.reason||'—';
+      auditBody.appendChild(tr);
     });
+
+    const showing=document.getElementById('historyShowing');
+    if(showing)showing.textContent=`${combined.length} items   Showing 1 to ${combined.length} of ${combined.length} entries`;
   }
 })();
-
-
-
 
 
 // Communication > Email: secondary Email Inbox / Email Outbox menu.
@@ -721,6 +890,7 @@ RangamWorks Program Team`
     outbox.classList.toggle('active',!isInbox);
     inbox.setAttribute('aria-selected',isInbox?'true':'false');
     outbox.setAttribute('aria-selected',isInbox?'false':'true');
+    document.querySelectorAll('.email-inbox-action').forEach(el=>el.classList.toggle('hidden',!isInbox));
   }
   inbox.addEventListener('click',()=>select('inbox'));
   outbox.addEventListener('click',()=>select('outbox'));
@@ -767,6 +937,9 @@ RangamWorks Program Team`
         }
       }
       if(messageEl) messageEl.textContent=btn.dataset.message||'No message content available.';
+      if(window.addTicketAudit){
+        window.addTicketAudit(`${channel} ${direction} Viewed`,null,null,'Anne Fahey',`${direction} ${channel} communication dated ${btn.dataset.date||'—'} opened from Communication history.`);
+      }
       openModal('communicationDetailModal');
     });
   });
@@ -814,6 +987,7 @@ document.querySelectorAll('.dynamic-history-eye').forEach(btn=>{
       const fileName=row&&row.cells&&row.cells[0]?row.cells[0].textContent.trim():'this attachment';
       if(window.confirm(`Are you sure you want to delete ${fileName}?`)){
         if(row) row.remove();
+        if(window.addTicketAudit)window.addTicketAudit('Attachment Deleted',null,null,'Anne Fahey',`Attachment "${fileName}" deleted after confirmation.`);
       }
     });
   }
@@ -830,6 +1004,7 @@ document.querySelectorAll('.dynamic-history-eye').forEach(btn=>{
       const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
       if(!validEmail||!subjectValue||!messageValue){
         window.showTicketToast('Something went wrong, resend email again.','error');
+        if(window.addTicketAudit)window.addTicketAudit('Email Send Failed',null,null,'Anne Fahey',`Email could not be sent. To: ${emailValue||'missing'}; Subject: ${subjectValue||'missing'}.`);
         if(!validEmail&&to) to.focus();
         else if(!subjectValue&&subject) subject.focus();
         else if(message) message.focus();
@@ -837,7 +1012,7 @@ document.querySelectorAll('.dynamic-history-eye').forEach(btn=>{
       }
       window.showTicketToast('Email sent successfully','success');
       if(window.addTicketAudit){
-        window.addTicketAudit('Email Sent','Accepted','In-Progress','Anne Fahey','Email sent to '+emailValue+'.');
+        window.addTicketAudit('Email Sent',null,null,'Anne Fahey',`Email sent successfully to ${emailValue}. Subject: "${subjectValue}".`);
       }
     });
   }
@@ -846,6 +1021,186 @@ document.querySelectorAll('.dynamic-history-eye').forEach(btn=>{
   if(saveBtn){
     saveBtn.addEventListener('click',function(){
       window.showTicketToast('Saved Successfully!','success');
+    });
+  }
+})();
+
+
+// Requester Communication tooltip: open on hover/focus/click; close on outside click or Escape.
+(function(){
+  const btn=document.getElementById('requesterCommTooltipBtn');
+  const tip=document.getElementById('requesterCommTooltipText');
+  if(!btn||!tip)return;
+
+  let pinned=false;
+  const openTip=()=>{
+    tip.classList.add('show');
+    btn.setAttribute('aria-expanded','true');
+  };
+  const closeTip=()=>{
+    if(pinned)return;
+    tip.classList.remove('show');
+    btn.setAttribute('aria-expanded','false');
+  };
+  const forceClose=()=>{
+    pinned=false;
+    tip.classList.remove('show');
+    btn.setAttribute('aria-expanded','false');
+  };
+
+  btn.addEventListener('mouseenter',openTip);
+  btn.addEventListener('mouseleave',closeTip);
+  btn.addEventListener('focus',openTip);
+  btn.addEventListener('blur',closeTip);
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    pinned=!pinned;
+    if(pinned)openTip(); else forceClose();
+  });
+
+  tip.addEventListener('mouseenter',openTip);
+  tip.addEventListener('mouseleave',closeTip);
+
+  document.addEventListener('click',e=>{
+    if(!btn.contains(e.target)&&!tip.contains(e.target))forceClose();
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape')forceClose();
+  });
+})();
+
+
+// Communication > Email Inbox: reply to a received email.
+(function(){
+  const modal=document.getElementById('emailReplyModal');
+  if(!modal)return;
+  const to=document.getElementById('replyEmailTo');
+  const subject=document.getElementById('replyEmailSubject');
+  const message=document.getElementById('replyEmailMessage');
+  const original=document.getElementById('replyOriginalMessage');
+  const send=document.getElementById('sendReplyEmailBtn');
+
+  document.querySelectorAll('.email-reply-link').forEach(link=>{
+    link.addEventListener('click',e=>{
+      e.preventDefault();
+      const incomingSubject=link.dataset.subject||'';
+      if(to)to.value=link.dataset.address||'';
+      if(subject)subject.value=/^\s*re:/i.test(incomingSubject)?incomingSubject:`Re: ${incomingSubject}`;
+      if(message)message.value='';
+      if(original)original.textContent=link.dataset.message||'No original message available.';
+      openModal('emailReplyModal');
+      setTimeout(()=>{if(message)message.focus();},0);
+    });
+  });
+
+  if(send){
+    send.addEventListener('click',()=>{
+      const emailValue=to?to.value.trim():'';
+      const subjectValue=subject?subject.value.trim():'';
+      const messageValue=message?message.value.trim():'';
+      if(!emailValue||!subjectValue||!messageValue){
+        if(window.showTicketToast)window.showTicketToast('Something went wrong, resend email again.','error');
+        if(!subjectValue&&subject)subject.focus();
+        else if(!messageValue&&message)message.focus();
+        return;
+      }
+      if(window.addTicketAudit){
+        window.addTicketAudit('Email Reply Sent',null,null,'Anne Fahey',`Reply sent to ${emailValue}. Subject: "${subjectValue}".`);
+      }
+      if(window.showTicketToast)window.showTicketToast('Email sent successfully','success');
+      closeModal('emailReplyModal');
+    });
+  }
+})();
+
+
+// Create Ticket: optional attachment upload flow.
+(function(){
+  const dropzone=document.getElementById('createTicketDropzone');
+  const input=document.getElementById('createTicketFileInput');
+  const body=document.getElementById('createTicketAttachmentBody');
+  const list=document.getElementById('createTicketAttachmentList');
+  if(!dropzone||!input||!body||!list)return;
+
+  const MAX_SIZE=20*1024*1024;
+  const allowedExtensions=['pdf','doc','docx','png','jpg','jpeg'];
+  let files=[];
+
+  const render=()=>{
+    body.innerHTML='';
+    files.forEach((file,index)=>{
+      const tr=document.createElement('tr');
+      const size=Math.max(1,Math.round(file.size/1024));
+      tr.innerHTML=`<td></td><td>${size} KB</td><td><a href="#" class="delete-create-ticket-attachment" data-index="${index}" aria-label="Delete ${file.name}" title="Delete attachment">🗑</a></td>`;
+      tr.cells[0].textContent=file.name;
+      body.appendChild(tr);
+    });
+    list.classList.toggle('hidden',files.length===0);
+  };
+
+  const addFiles=incoming=>{
+    Array.from(incoming).forEach(file=>{
+      const ext=(file.name.split('.').pop()||'').toLowerCase();
+      if(!allowedExtensions.includes(ext)){
+        if(window.showTicketToast)window.showTicketToast(`Unsupported file type: ${file.name}`,'error');
+        return;
+      }
+      if(file.size>MAX_SIZE){
+        if(window.showTicketToast)window.showTicketToast(`${file.name} exceeds the 20MB file-size limit.`,'error');
+        return;
+      }
+      const duplicate=files.some(existing=>existing.name===file.name&&existing.size===file.size);
+      if(!duplicate)files.push(file);
+    });
+    render();
+  };
+
+  dropzone.addEventListener('click',()=>input.click());
+  dropzone.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click();}
+  });
+  input.addEventListener('change',()=>{
+    addFiles(input.files);
+    input.value='';
+  });
+
+  ['dragenter','dragover'].forEach(eventName=>{
+    dropzone.addEventListener(eventName,e=>{
+      e.preventDefault();
+      dropzone.classList.add('drag-active');
+    });
+  });
+  ['dragleave','drop'].forEach(eventName=>{
+    dropzone.addEventListener(eventName,e=>{
+      e.preventDefault();
+      dropzone.classList.remove('drag-active');
+    });
+  });
+  dropzone.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
+
+  body.addEventListener('click',e=>{
+    const link=e.target.closest('.delete-create-ticket-attachment');
+    if(!link)return;
+    e.preventDefault();
+    const index=Number(link.dataset.index);
+    const file=files[index];
+    if(!file)return;
+    if(window.confirm(`Are you sure you want to delete ${file.name}?`)){
+      files.splice(index,1);
+      render();
+    }
+  });
+
+  const form=document.getElementById('createTicketForm');
+  if(form){
+    form.addEventListener('submit',()=>{
+      try{
+        sessionStorage.setItem('rangamworks_new_ticket_attachments',JSON.stringify(files.map(file=>({
+          name:file.name,
+          size:file.size,
+          type:file.type
+        }))));
+      }catch(e){}
     });
   }
 })();

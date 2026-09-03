@@ -2,7 +2,7 @@
 
 <html><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>RangamWorks Wireframe - Ticket List</title><link href="styles.css" rel="stylesheet"/></head><body data-access-role="program-team"><div class="app">
 <aside class="sidebar"><div class="brand">Rangam<b>Works</b></div><nav class="nav"><h4>Jobs</h4><a href="#">Search Jobs</a><h4>Candidates</h4><a href="#">Create Candidate</a><a href="candidate-details.html">Candidates List</a><a href="#">Candidates Status</a><a href="#">Refer Candidate</a><a href="#">Candidate Connect</a><h4>Ticket System</h4><a class="active" href="index.html">Ticket List</a><a href="create-ticket.html">Create Ticket</a><h4>Reports &amp; Analytics</h4><a href="#">Member Activity Dashboard</a><a href="#">Member Activity Reports</a></nav></aside>
-<main class="content"><div class="topbar"><div><h1>All Tickets</h1><div class="muted">View, filter and manage all member and health plan tickets.</div></div><div class="actions"><button class="btn">Export</button><a class="btn primary" href="create-ticket.html">Create Ticket</a></div></div>
+<main class="content"><div class="topbar"><div><h1>All Tickets</h1><div class="muted">View, filter and manage all member and health plan tickets.</div></div><div class="actions"><a class="btn primary" href="create-ticket.html">Create Ticket</a></div></div>
 <section class="kpis"><div class="kpi"><strong>428</strong>Total Tickets</div><div class="kpi"><strong>112</strong>New</div><div class="kpi"><strong>186</strong>In Progress</div><div class="kpi"><strong>24</strong>On Hold</div><div class="kpi"><strong>78</strong>Closed</div></section>
 <section class="card"><div class="card-h">Filter Tickets</div><div class="card-b"><div class="filters request-filter-layout">
 <div class="field candidate-search-field"><label for="candidateSearch">Candidate Name, Email or Phone Number</label><input autocomplete="off" id="candidateSearch" placeholder="Search candidate by name, email or phone" type="search"/></div>
@@ -16,7 +16,7 @@
 <div class="field"><label>From</label><input id="dateFrom" type="date" value="2026-08-01"/></div>
 <div class="field"><label>To</label><input id="dateTo" type="date" value="2026-08-31"/></div>
 </div>
-<div class="filters-actions"><button class="btn">Clear Filters</button><button class="btn primary">Apply Filters</button></div></div></section>
+<div class="filters-actions"><button class="btn" id="exportTicketsBtn">Export</button><button class="btn">Clear Filters</button><button class="btn primary">Apply Filters</button></div></div></section>
 <div class="table-wrap"><table id="requestListTable"><thead><tr>
 <th><button class="sort-head" data-sort-col="0" type="button">Ticket ID <span aria-hidden="true">↕</span></button></th>
 <th><button class="sort-head" data-sort-col="1" type="button">Ticket Type <span aria-hidden="true">↕</span></button></th>
@@ -62,12 +62,12 @@
 <td>Password/Login Support</td>
 <td><a href="candidate-details.html">Eugene Hubbard</a></td>
 <td><span class="badge orange">On-Hold</span></td>
-<td>Bhavi Thaker</td>
+<td>Program Team</td>
 
 
 <td data-sort-value="2026-05-06T09:15:00">May 6, 2026</td><td data-sort-value="2026-05-08T11:45:00">May 8, 2026 11:45 AM</td><td data-sort-value=""></td>
 <td><span class="badge green">Yes</span></td>
-<td><button aria-label="View status updates for ticket 6128" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Bhavi Thaker" data-current-status="On-Hold" data-member-name="Eugene Hubbard" data-ticket-id="6128" type="button">👁</button></td>
+<td><button aria-label="View status updates for ticket 6128" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Program Team" data-current-status="On-Hold" data-member-name="Eugene Hubbard" data-ticket-id="6128" type="button">👁</button></td>
 </tr>
 <tr data-candidate-search="Eugene Hubbard davidad@email.com (725) 246-4081">
 <td><a href="manage-request.html">6032</a></td>
@@ -88,12 +88,12 @@
 <td>General Questions</td>
 <td><a href="candidate-details.html">Emily Martin</a></td>
 <td><span class="badge blue">New</span></td>
-<td>Bhavi Thaker</td>
+<td>Program Team</td>
 
 
 <td data-sort-value="2026-07-18T10:22:00">Jul 18, 2026</td><td data-sort-value="2026-07-21T08:10:00">Jul 21, 2026 8:10 AM</td><td data-sort-value=""></td>
 <td><span class="badge blue">No</span></td>
-<td><button aria-label="View status updates for ticket 6491" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Bhavi Thaker" data-current-status="New" data-member-name="Emily Martin" data-ticket-id="6491" type="button">👁</button></td>
+<td><button aria-label="View status updates for ticket 6491" class="icon-btn history-eye dynamic-history-eye" data-current-owner="Program Team" data-current-status="New" data-member-name="Emily Martin" data-ticket-id="6491" type="button">👁</button></td>
 </tr>
 </tbody></table><div class="footer-row"><span>Showing 1 to 5 of 428 tickets</span><span>1 2 3 4 5 … 17</span></div></div>
 </main></div>

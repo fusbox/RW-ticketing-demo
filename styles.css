@@ -199,3 +199,43 @@ body.view-history-page .ticket-head{grid-template-columns:2fr repeat(3,minmax(0,
 .candidate-program-status-options{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
 .candidate-program-status-options label{display:inline-flex;align-items:center;gap:5px;line-height:1.2;cursor:pointer;white-space:nowrap;}
 .candidate-program-status-options input[type="radio"]{width:14px;height:14px;margin:0;vertical-align:middle;accent-color:#0b61e8;flex:0 0 14px;}
+
+
+/* Requester Communication title tooltip */
+.requester-communication-title{display:flex;align-items:center;gap:7px;position:relative;overflow:visible;}
+.title-tooltip{border:0;background:transparent;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;cursor:pointer;color:inherit;line-height:1;position:relative;z-index:101;}
+.title-tooltip:focus{outline:2px solid #0b61e8;outline-offset:2px;border-radius:50%;}
+.title-tooltip-text{position:absolute;left:155px;top:calc(100% + 7px);width:270px;padding:9px 11px;border-radius:6px;background:#1f2937;color:#fff;font-size:12px;font-weight:400;line-height:1.4;box-shadow:0 6px 18px rgba(0,0,0,.22);opacity:0;visibility:hidden;pointer-events:none;z-index:5000;transition:opacity .15s ease;}
+.title-tooltip-text.show{opacity:1;visibility:visible;pointer-events:auto;}
+.requester-communication-title:hover .title-tooltip-text{opacity:1;visibility:visible;}
+.card,.card-h{overflow:visible;}
+
+
+/* Email Inbox reply action */
+.email-reply-link{display:inline-flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;text-decoration:none;color:#075ee8;padding:5px 7px;border-radius:5px;}
+.email-reply-link:hover,.email-reply-link:focus{background:#eef5ff;outline:none;}
+.email-reply-modal{max-width:680px;}
+.email-reply-modal textarea{min-height:150px;resize:vertical;}
+.reply-original-email{margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:7px;background:#f8fafc;}
+.reply-original-email p{margin:6px 0 0;white-space:pre-wrap;}
+
+
+/* Create Ticket attachment flow */
+.create-ticket-attachments{margin-top:4px;}
+.create-ticket-dropzone{margin-top:7px;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;}
+.create-ticket-dropzone:focus{outline:2px solid #0b61e8;outline-offset:2px;}
+.create-ticket-dropzone.drag-active{background:#eef5ff;border-color:#0b61e8;}
+.create-ticket-attachment-list table{margin-bottom:0;}
+.delete-create-ticket-attachment{display:inline-flex;align-items:center;justify-content:center;font-size:18px;text-decoration:none;color:#c91829;padding:4px 6px;border-radius:4px;}
+.delete-create-ticket-attachment:hover,.delete-create-ticket-attachment:focus{background:#fff0f1;outline:none;}
+
+
+/* Candidate Details - Tickets tab */
+.candidate-tickets-card .card-b{padding:0;}
+.candidate-ticket-table-wrap{border:0;border-radius:0;overflow-x:auto;}
+#candidateTicketTable{width:100%;min-width:1260px;border-collapse:collapse;}
+#candidateTicketTable th{background:#edf3f9;color:#10233d;font-weight:700;white-space:nowrap;padding:13px 12px;border-bottom:1px solid var(--line);text-align:left;}
+#candidateTicketTable td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap;}
+#candidateTicketTable tbody tr:last-child td{border-bottom:0;}
+#candidateTicketTable a:not(.icon-btn){color:#075ee8;text-decoration:none;}
+#candidateTicketTable .candidate-history-eye{display:inline-flex;font-size:20px;font-weight:600;text-decoration:none;}
