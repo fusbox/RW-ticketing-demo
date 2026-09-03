@@ -67,6 +67,22 @@
         </div>
 
         <div class="contact-field full-width"><label for="ticketMessage">Message <span>*</span></label><textarea id="ticketMessage" required></textarea></div>
+
+        <div class="contact-field full-width create-ticket-attachments">
+          <label>Attachments <span class="muted">(Optional)</span></label>
+          <div class="dropzone create-ticket-dropzone" id="createTicketDropzone" tabindex="0" role="button" aria-controls="createTicketFileInput">
+            ☁ <b>Drag and drop files here or browse</b><br>
+            <span class="muted">Max file size: 20MB | Supported: PDF, DOC, DOCX, PNG, JPG</span>
+            <input id="createTicketFileInput" type="file" multiple hidden accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+          </div>
+          <div class="table-wrap create-ticket-attachment-list hidden" id="createTicketAttachmentList" style="margin-top:12px">
+            <table>
+              <thead><tr><th>File Name</th><th>Size</th><th>Action</th></tr></thead>
+              <tbody id="createTicketAttachmentBody"></tbody>
+            </table>
+          </div>
+          <div class="muted" id="createTicketAttachmentHelp" style="margin-top:7px">Attach screenshots or supporting documents that help explain the request.</div>
+        </div>
       </div>
       <button class="btn primary submit-ticket-btn" type="submit">Submit</button>
     </form>
